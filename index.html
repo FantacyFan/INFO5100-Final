@@ -133,7 +133,7 @@ svg{
             border: 1px solid #bdc3c7;
             background-color: #fff; 
         }
-        input[type='range']::-webkit-slider-thumb {
+        input[type='range']:-webkit-slider-thumb {
             -webkit-appearance: none;
             background-color: #ecf0f1;
             border: 1px solid #bdc3c7;
@@ -260,11 +260,11 @@ var stateGrid = {
 "FL" : { "state": "FL", "row": 7, "col": 8 }
 };
 
-var selectedStates = {};
+var selectedState = "";
 var selectedOccupations = {};
 var selectedStatesRegression = {};
 var selectedOccupationsRegression = {};
-
+var year = 2014;
 var salaries;
 // Download global health data, sourced from WHO, formatted by the Guardian
 var svg1 = d3.select("#chart").append("svg")
@@ -282,7 +282,7 @@ stateIDs.forEach(function(stateID) {
 	selectedStatesRegression[stateID] = false;
 });
 
- selectedStates = {"1": true, "2": false, "4": false, "5": false, "6": false, "8": false, "9": false, "10": false, "11": false, "12": false, "13": false, "15": false, "16": false, "17": false, "18": false, "19": false, "20": false, "21": false, "22": false, "23": false, "24": false, "25": false, "26": false, "27": false, "28": false, "29": false, "30": false, "31": false, "32": false, "33": false, "34": false, "35": false, "36": false, "37": false, "38": false, "39": false, "40": false, "41": false, "42": false, "44": false, "45": false, "46": false, "47": false, "48": false, "49": false, "50": false, "51": false, "53": false, "54": false, "55": false, "56": false, "66": false, "72": false, "78": false}
+ /*selectedStates = {"1": false, "2": false, "4": false, "5": false, "6": false, "8": false, "9": false, "10": false, "11": false, "12": false, "13": false, "15": false, "16": false, "17": false, "18": false, "19": false, "20": false, "21": false, "22": false, "23": false, "24": false, "25": false, "26": false, "27": false, "28": false, "29": false, "30": false, "31": false, "32": false, "33": false, "34": false, "35": false, "36": false, "37": false, "38": false, "39": false, "40": false, "41": false, "42": false, "44": false, "45": false, "46": false, "47": false, "48": false, "49": false, "50": false, "51": false, "53": false, "54": false, "55": false, "56": false, "66": false, "72": false, "78": false}*/
 
 
 
@@ -312,11 +312,13 @@ stateIDs.forEach(function(stateID) {
 				$(".year").css("background", "white");
 			    $(this).css("background", "#d3d3d3");
 			    var year_value = clicked[0].innerHTML;
-			    for(var i=0; i<employee.length; i++){
+			    year = Number(year_value);
+			    drawBubbleChart();
+			    /*for(var i=0; i<employee.length; i++){
 		        	if(year_value == employee[i]['YEAR']){
 		        		console.log(employee[i]);
 		  			}
-			    } 
+			    } */
 			});
 		      
 		    var statePaths = mapSvg.append("g");
@@ -335,13 +337,15 @@ stateIDs.forEach(function(stateID) {
 		      	//click on state to find the related data
 		      	.on("click",function(d){
 			        var stateName = d3.select(this).attr("class");
+			        selectedState = stateName;
+			        drawBubbleChart();
 			        // 
-			        for(var i=0; i<employee.length; i++){
+			        /*for(var i=0; i<employee.length; i++){
 			        	if(stateName == employee[i]['AREA']){
 			        		console.log(employee[i]);
 			        		d3.select(this).style("fill", "#8B1A00");
 			  			}
-			        }
+			        }*/
 			    });
 
 
@@ -585,7 +589,6 @@ function drawRegression(){
 
 drawRegression();
 
-var year = 2014;
 var svg2 = d3.select("#chartbubble").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -594,7 +597,7 @@ var svg2 = d3.select("#chartbubble").append("svg")
 
 var xDomain2 = [0, d3.max(salaries,function(d){
 			return Number(d.TOT_EMP);
-		})+100000];  
+		})*1.2];  
 var	yDomain2 = [0,d3.max(salaries,function(d){
 	return Number(d.H_MEAN);
 })+5];
@@ -633,25 +636,31 @@ var yAxis2graph = svg2.append("g")
 			};
 		});
 		console.log(pointsBubble);
-
+		console.log(selectedState);
 		function isSelectedPoints (point) {
-		return selectedStates[point.state] 
-			&& (point.year == year) 
-				&& (point.occupation != "All Occupations") 
-				&& (!isNaN(point.x)) 
-				&& (!isNaN(point.y));
+		return(point.state == selectedState)&&(point.year == year)&&(point.occupation != "All Occupations")&&(!isNaN(point.x))&&(!isNaN(point.y));
+		}
+
+
+		function isSelectedScalePoints (point) {
+		return(point.state == selectedState)&&(point.occupation != "All Occupations")&&(!isNaN(point.x))&&(!isNaN(point.y));
 		}
 
 			// Various scales. These domains make assumptions of data, naturally.
 		var selectedPoints = pointsBubble.filter(isSelectedPoints);
+		var selectedScalePoints = pointsBubble.filter(isSelectedScalePoints);
 		console.log(selectedPoints);
 
+		svg2.selectAll("circle").remove();
+  		svg2.selectAll(".text_bubble").remove();
+
+		if(selectedPoints.length == 0) return;
 		selectedPoints.sort(order);
 
-		xDomain2 = [0, d3.max(selectedPoints,function(d){
+		xDomain2 = [0, d3.max(selectedScalePoints,function(d){
 			return d.x;
-		})+100000];  
-		yDomain2 = [0,d3.max(selectedPoints,function(d){
+		})*1.2];  
+		yDomain2 = [0,d3.max(selectedScalePoints,function(d){
 			return d.y;
 		})+5];
 		 xScale2 = d3.scale.linear().domain(xDomain2).range([0, width]),
@@ -675,8 +684,7 @@ var yAxis2graph = svg2.append("g")
     return b.x - a.x;
   }		
 
-  		svg2.selectAll("circle").remove();
-  		svg2.selectAll("text.bubble").remove();
+  		
 	  	var dot = svg2
     	.selectAll(".dot")
       	.data(selectedPoints)
@@ -700,11 +708,11 @@ var yAxis2graph = svg2.append("g")
 
       	//console.log(selectedPoints);
 
-      	var textlabel = svg2.selectAll("text.bubble")
+      	var textlabel = svg2.selectAll(".text_bubble")
       	.data(selectedPoints)
       	.enter()
       	.append("text")
-      	.attr("class", "text")
+      	.attr("class", "text_bubble")
       	.attr("x", function(d){return xScale2(d.x);})
       	.attr("y", function(d){return yScale2(d.y);})
       	.text(function(d){return d.occupation + " " + d.year})
@@ -744,7 +752,7 @@ var yAxis2graph = svg2.append("g")
 	}
 
 
-	drawBubbleChart();
+	//drawBubbleChart();
 
 	    	});
 	});
