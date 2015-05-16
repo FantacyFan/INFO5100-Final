@@ -6,11 +6,9 @@
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="http://d3js.org/topojson.v1.min.js"></script>
   <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 
-  <style>
-
+  	<style>
 	#map{
 		margin-left: 30px;
 	}	
@@ -30,129 +28,129 @@
 		font-size: 15px;
 	}
 
-svg{
-	Mapwidth:100%;
-	Mapheight: 100%;
-}
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
+	svg{
+		width:100%;
+		height: 100%;
+	}
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
 
-.bar {
-  fill: orange;
-}
+	.bar {
+	  fill: orange;
+	}
 
-.solidArc:hover {
-  fill: orangered ;
-}
+	.solidArc:hover {
+	  fill: orangered ;
+	}
 
-.solidArc {
-    -moz-transition: all 0.3s;
-    -o-transition: all 0.3s;
-    -webkit-transition: all 0.3s;
-    transition: all 0.3s;
-}
+	.solidArc {
+	    -moz-transition: all 0.3s;
+	    -o-transition: all 0.3s;
+	    -webkit-transition: all 0.3s;
+	    transition: all 0.3s;
+	}
 
-.x.axis path {
-  display: none;
-}
+	.x.axis path {
+	  display: none;
+	}
 
-.aster-score { 
-  line-Mapheight: 1;
-  font-weight: bold;
-  font-size: 500%;
-}
+	.aster-score { 
+	  line-height: 1;
+	  font-weight: bold;
+	  font-size: 500%;
+	}
 
-.d3-tip {
-  line-Mapheight: 1;
-  font-weight: bold;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  border-radius: 2px;
-}
+	.d3-tip {
+	  line-height: 1;
+	  font-weight: bold;
+	  padding: 12px;
+	  background: rgba(0, 0, 0, 0.8);
+	  color: #fff;
+	  border-radius: 2px;
+	}
 
-/* Creates a small triangle extender for the tooltip */
-.d3-tip:after {
-  box-sizing: border-box;
-  display: inline;
-  font-size: 10px;
-  Mapwidth: 100%;
-  line-Mapheight: 1;
-  color: rgba(0, 0, 0, 0.8);
-  content: "\25BC";
-  position: absolute;
-  text-align: center;
-}
+	/* Creates a small triangle extender for the tooltip */
+	.d3-tip:after {
+	  box-sizing: border-box;
+	  display: inline;
+	  font-size: 10px;
+	  width: 100%;
+	  line-height: 1;
+	  color: rgba(0, 0, 0, 0.8);
+	  content: "\25BC";
+	  position: absolute;
+	  text-align: center;
+	}
 
-/* Style northward tooltips differently */
-.d3-tip.n:after {
-  margin: -1px 0 0 0;
-  top: 100%;
-  left: 0;
-}
-
-
-#chart {
-  margin-left: 40px;
-  Mapheight: 510px;
-}
-
-#chartbubble {
-  margin-left: 40px;
-  Mapheight: 510px;
-}
+	/* Style northward tooltips differently */
+	.d3-tip.n:after {
+	  margin: -1px 0 0 0;
+	  top: 100%;
+	  left: 0;
+	}
 
 
-.dot {
-  stroke: #000;
-}
+	#chart {
+	  margin-left: 40px;
+	  height: 510px;
+	}
+
+	#chartbubble {
+	  margin-left: 40px;
+	  height: 510px;
+	}
 
 
-.axis path, .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
+	.dot {
+	  stroke: #000;
+	}
 
 
-*:focus,
-  *:active {
+	.axis path, .axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+
+
+	*:focus,
+  	*:active {
             outline: 0;
         }
 
-  input[type=range]{
+  	input[type=range]{
             display: inline-block;
-            Mapwidth: 200px;
+            width: 200px;
             -webkit-appearance: none;
             border-radius: 8px;
-            Mapheight: 7px;
+            height: 7px;
             border: 1px solid #bdc3c7;
             background-color: #fff; 
         }
-        input[type='range']:-webkit-slider-thumb {
+
+    input[type='range']:-webkit-slider-thumb {
+
             -webkit-appearance: none;
             background-color: #ecf0f1;
             border: 1px solid #bdc3c7;
-            Mapwidth: 20px;
-            Mapheight: 20px;
+            width: 20px;
+            height: 20px;
             border-radius: 10px;
             cursor: pointer;
         }
-  .slider-container{
+  	.slider-container{
             padding:10px;
             border: 2px solid lightgray;
             display: inline-block;
-            Mapwidth: 220px;
+            width: 220px;
             margin-bottom: 5px;
             color: gray;
         }
-
-
-  </style>
+  	</style>
 </head>
 <body  onload="sizeChange()">
 	<div class="row">
@@ -180,16 +178,21 @@ svg{
 			</div>
 	    </div>
 	</div>
-
+	<div class="row">
 	<div id = "chartbubble"></div>
+	</div>
 
+	<div class="row">
 	<div class="slider-container">
         <span id="slider-label">Year: 2014</span><input id = "myslider" type="range" id="year" min="2005" max="2014" step="1" value="2014" ></input>
 	</div>
+	</div>
 
+	<div class="row">
 	<div id="chart"></div>
 	<select id="selectOccupation" >
 	</select>
+	</div>
 	<script>
 	d3.select(window)
     		.on("resize", sizeChange);
@@ -203,6 +206,7 @@ svg{
 
 
 	// Chart dimensions.
+
 var margin = {top: 22.5, right: 19.5, bottom: 30.5, left: 39.5},
     width = 960 - margin.right,
     height = 500 - margin.top - margin.bottom,
@@ -286,6 +290,7 @@ stateIDs.forEach(function(stateID) {
 
 
 
+
 	
 	d3.json("us.json", function(error, shapes) {  
     	statesCoord = topojson.feature(shapes, shapes.objects.states).features; //long/lat coordinates
@@ -304,7 +309,7 @@ stateIDs.forEach(function(stateID) {
 		    }
 		    
 		    var mapSvg = d3.select("#map").append("svg")
-		        .attr("Mapheight", Mapheight);
+		        .attr("height", Mapheight/3);
 
 		    //select data based on different years
 			$(".year").click(function(){
@@ -348,21 +353,6 @@ stateIDs.forEach(function(stateID) {
 			        }*/
 			    });
 
-
-			 //    employee_new = employee.map(function (salary) {
-				// 	return { 
-				// 		state: salary.ST,
-				// 		occupation: salary.OCC_TITLE,
-				// 		year: Number(salary.YEAR),
-				// 		x: Number(salary.TOT_EMP),
-				// 		y: Number(salary.H_MEAN) 
-				// 	};
-				// });
-
-
-				
-
-
 		      	// add the hover effect
 			    function mouseOver(){
 					d3.select(this).transition().duration(200).style("opacity", .5);      
@@ -372,58 +362,55 @@ stateIDs.forEach(function(stateID) {
 					d3.select(this).transition().duration(500).style("opacity", 1);      
 				}
 
-
-
-
 				//tgy's code++++++++++++++++
 
 
 				salaries = rows;
-	console.log(salaries[0]);
+			console.log(salaries[0]);
 
 
-	for(var i = 0; i <500; i++){
-		selectedOccupations[salaries[i]["OCC_TITLE"]] = false;
-		selectedOccupationsRegression[salaries[i]["OCC_TITLE"]] = false;
-	}
+			for(var i = 0; i <500; i++){
+				selectedOccupations[salaries[i]["OCC_TITLE"]] = false;
+				selectedOccupationsRegression[salaries[i]["OCC_TITLE"]] = false;
+			}
 
-	/*for(var i = 0; i < salaries.length; i++){
-		selectedStates[salaries[i]["AREA"]] = false;
-	}*/
+			/*for(var i = 0; i < salaries.length; i++){
+				selectedStates[salaries[i]["AREA"]] = false;
+			}*/
 
-	selectedOccupations["All Occupations"] = true;
+			selectedOccupations["All Occupations"] = true;
 
-	var pointsRegression = salaries.map(function (salary) {
-			return { 
-				state: salary.ST,
-				occupation: salary.OCC_TITLE,
-				x: Number(salary.YEAR),
-				y: Number(salary.H_MEAN) 
-			};
-		});
+			var pointsRegression = salaries.map(function (salary) {
+					return { 
+						state: salary.ST,
+						occupation: salary.OCC_TITLE,
+						x: Number(salary.YEAR),
+						y: Number(salary.H_MEAN) 
+					};
+				});
 
-	var xDomain1 = [2004,2015];  
-	var	yDomain1 = [0,d3.max(pointsRegression,function(d){
-		return d.y;
-	})];
-	var xScale1 = d3.scale.linear().domain(xDomain1).range([0, width]),
-	    yScale1 = d3.scale.linear().domain(yDomain1).range([height, 0]);
+			var xDomain1 = [2004,2015];  
+			var	yDomain1 = [0,d3.max(pointsRegression,function(d){
+				return d.y;
+			})];
+			var xScale1 = d3.scale.linear().domain(xDomain1).range([0, width]),
+			    yScale1 = d3.scale.linear().domain(yDomain1).range([height, 0]);
 
-	// The x & y axes.
-	var xAxis1 = d3.svg.axis().orient("bottom").scale(xScale1),
-	//.ticks(12, d3.format(",d")),
-	    yAxis1 = d3.svg.axis().scale(yScale1).orient("left");
+			// The x & y axes.
+			var xAxis1 = d3.svg.axis().orient("bottom").scale(xScale1),
+			//.ticks(12, d3.format(",d")),
+			    yAxis1 = d3.svg.axis().scale(yScale1).orient("left");
 
-	// Add the x-axis.
-	var xAxis1graph = svg1.append("g")
-	    .attr("class", "axis")
-	    .attr("transform", "translate(0," + height + ")")
-	    .call(xAxis1);
+			// Add the x-axis.
+			var xAxis1graph = svg1.append("g")
+			    .attr("class", "axis")
+			    .attr("transform", "translate(0," + height + ")")
+			    .call(xAxis1);
 
-	// Add the y-axis.
-	var yAxis1graph = svg1.append("g")
-	    .attr("class", "axis")
-	    .call(yAxis1);  
+			// Add the y-axis.
+			var yAxis1graph = svg1.append("g")
+			    .attr("class", "axis")
+			    .call(yAxis1);  
 
 
 function drawRegression(){
@@ -757,23 +744,17 @@ var yAxis2graph = svg2.append("g")
 	    	});
 	});
 
-	function sizeChange() {
-	    d3.select("#map g").attr("transform", "scale(" + 7*$(window).Mapwidth()/12/$("#map").Mapwidth() + ")");
-	    $("svg").Mapheight($("#map").Mapwidth()*0.618);
-	}
-
-
 
 	// pie chart
 
-	var PieMapwidth = 350,
-    PieMapheight = 350,
-    radius = Math.min(PieMapwidth, PieMapheight) / 2,
+	var Piewidth = 350,
+    Pieheight = 350,
+    radius = Math.min(Piewidth, Pieheight) / 2,
     innerRadius = 0.3 * radius;
 
 var pie = d3.layout.pie()
     .sort(null)
-    .value(function(d) { return d.PieMapwidth; });
+    .value(function(d) { return d.Piewidth; });
 
 var tip = d3.tip()
   .attr('class', 'd3-tip')
@@ -793,10 +774,10 @@ var outlineArc = d3.svg.arc()
         .outerRadius(radius);
 
 var svg = d3.select("#bar-chart").append("svg")
-    .attr("PieMapwidth", PieMapwidth)
-    .attr("PieMapheight", PieMapheight)
+    .attr("width", Piewidth)
+    .attr("height", Pieheight)
     .append("g")
-    .attr("transform", "translate(" + PieMapwidth / 2 + "," + PieMapheight / 2 + ")");
+    .attr("transform", "translate(" + Piewidth / 2 + "," + Pieheight / 2 + ")");
 
 svg.call(tip);
 
@@ -808,7 +789,7 @@ d3.csv('aster_data.csv', function(error, data) {
 	    d.color  =  d.color;
 	    d.weight = +d.weight;
 	    d.score  = +d.score;
-	    d.PieMapwidth  = +d.weight;
+	    d.Piewidth  = +d.weight;
 	    d.label  =  d.label;
 	  });
 	  // for (var i = 0; i < data.score; i++) { console.log(data[i].id) }
@@ -850,6 +831,16 @@ d3.csv('aster_data.csv', function(error, data) {
 	    .style("font-size","30px");
 
 	});
+
+	function sizeChange() {
+	    d3.select("#map g").attr("transform", "scale(" + $(window).width()/1500 + ")");
+	    $("svg").height($("#map").width()*0.618);
+
+	    d3.select("#bar-chart g").attr("transform", "scale(" + $(window).width()/1200 + ") translate(" + Piewidth / 2 + "," + Pieheight / 2 + ")");
+	    $("svg").height($("#bar-chart").width()*0.618);
+
+	}
+
 
 	
 	</script>
