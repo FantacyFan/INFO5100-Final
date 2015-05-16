@@ -1,0 +1,327 @@
+<html>
+<head>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+  <style>
+	#map{
+		/*margin-left: 30px;*/
+	}
+
+	#year{
+	
+	}
+
+	#year ul{
+		padding-left: 0px;
+	}
+
+	#year ul li{
+		display: inline-block;
+		padding: 3px 6px;
+		border: 1px solid black;
+		font-size: 15px;
+	}
+
+svg{
+	width:100%;
+	height: 100%;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: orange;
+}
+
+.solidArc:hover {
+  fill: orangered ;
+}
+
+.solidArc {
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.aster-score { 
+  line-height: 1;
+  font-weight: bold;
+  font-size: 500%;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+  </style>
+</head>
+<body  onload="sizeChange()">
+	<div class="row">
+	    <div class="col-xs-12 col-md-7" >
+		  	<div id="map-wrapper">
+					<div id="map"></div>
+					<div id="year" style="margin-left:10%">
+						<ul>
+							<li class="year">2005</li>
+							<li class="year">2006</li>
+							<li class="year">2007</li>
+							<li class="year">2008</li>
+							<li class="year">2009</li>
+							<li class="year">2010</li>
+							<li class="year">2011</li>
+							<li class="year">2012</li>
+							<li class="year">2013</li>
+							<li class="year" style="background:#d3d3d3">2014</li>
+						</ul>
+					</div>
+			</div>
+	    </div>
+	    <div class="col-xs-12 col-md-5">
+		  	<div id="bar-chart">
+			</div>
+	    </div>
+	</div>
+
+	
+	<script>
+	d3.select(window)
+    		.on("resize", sizeChange);
+
+	var width = 800;
+	var height = 580;
+	var projection = d3.geo.albersUsa().scale(width).translate([width/2, height/2]);
+	var path = d3.geo.path().projection(projection); //path of USA
+	var statesCoord;
+	var states;
+	var selectedStates = {};
+	
+	d3.json("us.json", function(error, shapes) {  
+    	statesCoord = topojson.feature(shapes, shapes.objects.states).features; //long/lat coordinates
+
+    	d3.csv("data.csv", function(error, rows) {
+		    // states = d3.map(rows,function(d){
+		    //     return d.id;
+		    // })
+
+		    var employee = new Array;
+		
+		    for(var i=0; i<rows.length; i++){    	
+		    	if(rows[i]['GROUP']=="total"){
+		    		employee.push(rows[i]);
+		    	}
+		    }
+		    
+		    var mapSvg = d3.select("#map").append("svg")
+		        .attr("height", height);
+
+		    //select data based on different years
+			$(".year").click(function(){
+				var clicked = $(this);
+				$(".year").css("background", "white");
+			    $(this).css("background", "#d3d3d3");
+			    var year_value = clicked[0].innerHTML;
+			    for(var i=0; i<employee.length; i++){
+		        	if(year_value == employee[i]['YEAR']){
+		        		console.log(employee[i]);
+		  			}
+			    } 
+			});
+		      
+		    var statePaths = mapSvg.append("g");
+
+		    //US states
+		    statePaths.selectAll("path").data(statesCoord).enter()
+		      	.append("path").attr("d", path)
+		      	.attr("class",function(state){
+			        return state.id;
+		      	})
+		      	.style("fill", "#AC564C")
+		      	.style("stroke", "#ccc")
+		      	.on("mouseover", mouseOver)
+		      	.on("mouseout", mouseOut)
+
+		      	//click on state to find the related data
+		      	.on("click",function(d){
+			        var stateName = d3.select(this).attr("class");
+			        // 
+			        for(var i=0; i<employee.length; i++){
+			        	if(stateName == employee[i]['AREA']){
+			        		console.log(employee[i]);
+			        		d3.select(this).style("fill", "#8B1A00");
+			  			}
+			        }
+			    });
+
+
+			 //    employee_new = employee.map(function (salary) {
+				// 	return { 
+				// 		state: salary.ST,
+				// 		occupation: salary.OCC_TITLE,
+				// 		year: Number(salary.YEAR),
+				// 		x: Number(salary.TOT_EMP),
+				// 		y: Number(salary.H_MEAN) 
+				// 	};
+				// });
+	
+				var year = 2005;
+
+				function isSelectedPoints (point) {
+				return selectedStates[point.STATE] && 
+					Number(point.YEAR) == year
+					&& point.OCC_TITLE != "All Occupations"
+					&& !isNaN(Number(point.TOT_EMP))
+					&& !isNaN(Number(point.H_MEAN));
+				}
+
+
+		      	// add the hover effect
+			    function mouseOver(){
+					d3.select(this).transition().duration(200).style("opacity", .5);      
+				}
+				
+				function mouseOut(){
+					d3.select(this).transition().duration(500).style("opacity", 1);      
+				}
+
+	    	});
+	});
+
+	function sizeChange() {
+	    d3.select("#map g").attr("transform", "scale(" + 7*$(window).width()/12/$("#map").width() + ")");
+	    $("svg").height($("#map").width()*0.618);
+	}
+
+
+
+	// pie chart
+
+	var Piewidth = 350,
+    Pieheight = 350,
+    radius = Math.min(Piewidth, Pieheight) / 2,
+    innerRadius = 0.3 * radius;
+
+var pie = d3.layout.pie()
+    .sort(null)
+    .value(function(d) { return d.Piewidth; });
+
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([0, 0])
+  .html(function(d) {
+    return d.data.label + ": <span style='color:orangered'>" + d.data.score + "</span>";
+  });
+
+var arc = d3.svg.arc()
+  .innerRadius(innerRadius)
+  .outerRadius(function (d) { 
+    return (radius - innerRadius) * (d.data.score / d.data.max) + innerRadius; 
+  });
+
+var outlineArc = d3.svg.arc()
+        .innerRadius(innerRadius)
+        .outerRadius(radius);
+
+var svg = d3.select("#bar-chart").append("svg")
+    .attr("Piewidth", Piewidth)
+    .attr("Pieheight", Pieheight)
+    .append("g")
+    .attr("transform", "translate(" + Piewidth / 2 + "," + Pieheight / 2 + ")");
+
+svg.call(tip);
+
+d3.csv('aster_data.csv', function(error, data) {
+
+	  data.forEach(function(d) {
+	    d.id     =  d.id;
+	    d.order  = +d.order;
+	    d.color  =  d.color;
+	    d.weight = +d.weight;
+	    d.score  = +d.score;
+	    d.Piewidth  = +d.weight;
+	    d.label  =  d.label;
+	  });
+	  // for (var i = 0; i < data.score; i++) { console.log(data[i].id) }
+	  
+	  var path = svg.selectAll(".solidArc")
+	      .data(pie(data))
+	    .enter().append("path")
+	      .attr("fill", function(d) { return d.data.color; })
+	      .attr("class", "solidArc")
+	      .attr("stroke", "gray")
+	      .attr("d", arc)
+	      .on('mouseover', tip.show)
+	      .on('mouseout', tip.hide);
+
+	  var outerPath = svg.selectAll(".outlineArc")
+	      .data(pie(data))
+	    .enter().append("path")
+	      .attr("fill", "none")
+	      .attr("stroke", "gray")
+	      .attr("class", "outlineArc")
+	      .attr("d", outlineArc);  
+
+
+	  // calculate the weighted mean score
+	  var score =
+	    data.reduce(function(a, b) {
+	      console.log('a:' + a + ', b.score: ' + b.score + ', b.weight: ' + b.weight);
+	      return a + (b.score * b.weight); 
+	    }, 0) / 
+	    data.reduce(function(a, b) { 
+	      return a + b.weight; 
+	    }, 0);
+
+	  svg.append("svg:text")
+	    .attr("class", "aster-score")
+	    .attr("dy", ".35em")
+	    .attr("text-anchor", "middle") // text-align: right
+	    .text(Math.round(score))
+	    .style("font-size","30px");
+
+	});
+
+	
+	</script>
+</body>
+</html>
