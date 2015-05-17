@@ -264,12 +264,16 @@ var stateGrid = {
 "FL" : { "state": "FL", "row": 7, "col": 8 }
 };
 
-var selectedState = "";
+var selectedState = "36";
 var selectedOccupations = {};
 var selectedStatesRegression = {};
 var selectedOccupationsRegression = {};
 var year = 2014;
 var salaries;
+var selectedData;
+
+var Piewidth = 350,
+    Pieheight = 350;
 // Download global health data, sourced from WHO, formatted by the Guardian
 var svg1 = d3.select("#chart").append("svg")
 	    	.attr("width", width + margin.left + margin.right)
@@ -300,14 +304,21 @@ stateIDs.forEach(function(stateID) {
 		    //     return d.id;
 		    // })
 
-		    var employee = new Array;
+		    //var employee = new Array;
+		    salaries = rows;
 		
-		    for(var i=0; i<rows.length; i++){    	
+		    /*for(var i=0; i<rows.length; i++){    	
 		    	if(rows[i]['GROUP']=="total"){
 		    		employee.push(rows[i]);
 		    	}
 		    }
-		    
+		    */
+		    function isSelectedData (data) {
+			return(data.AREA == selectedState)&&(data.OCC_TITLE != "All Occupations")&&(data.TOT_EMP != "**")&&(data.H_MEAN != "**");
+		}
+
+			selectedData = salaries.filter(isSelectedData);
+
 		    var mapSvg = d3.select("#map").append("svg")
 		        .attr("height", Mapheight/3);
 
@@ -318,6 +329,8 @@ stateIDs.forEach(function(stateID) {
 			    $(this).css("background", "#d3d3d3");
 			    var year_value = clicked[0].innerHTML;
 			    year = Number(year_value);
+			    selectedData = salaries.filter(isSelectedData);
+			    drawPieChart();
 			    drawBubbleChart();
 			    /*for(var i=0; i<employee.length; i++){
 		        	if(year_value == employee[i]['YEAR']){
@@ -343,6 +356,8 @@ stateIDs.forEach(function(stateID) {
 		      	.on("click",function(d){
 			        var stateName = d3.select(this).attr("class");
 			        selectedState = stateName;
+			        selectedData = salaries.filter(isSelectedData);
+			        drawPieChart();
 			        drawBubbleChart();
 			        // 
 			        /*for(var i=0; i<employee.length; i++){
@@ -365,7 +380,6 @@ stateIDs.forEach(function(stateID) {
 				//tgy's code++++++++++++++++
 
 
-				salaries = rows;
 			console.log(salaries[0]);
 
 
@@ -613,7 +627,7 @@ var yAxis2graph = svg2.append("g")
 	function drawBubbleChart(){
 		document.getElementById("myslider").value = year;
 		document.getElementById("slider-label").innerHTML = "Year: "+ year;
-		pointsBubble = salaries.map(function (salary) {
+		pointsBubble = selectedData.map(function (salary) {
 			return { 
 				state: salary.AREA,
 				occupation: salary.OCC_TITLE,
@@ -623,19 +637,15 @@ var yAxis2graph = svg2.append("g")
 			};
 		});
 		console.log(pointsBubble);
-		console.log(selectedState);
+		//console.log(selectedState);
 		function isSelectedPoints (point) {
-		return(point.state == selectedState)&&(point.year == year)&&(point.occupation != "All Occupations")&&(!isNaN(point.x))&&(!isNaN(point.y));
+			return point.year == year;
 		}
 
-
-		function isSelectedScalePoints (point) {
-		return(point.state == selectedState)&&(point.occupation != "All Occupations")&&(!isNaN(point.x))&&(!isNaN(point.y));
-		}
 
 			// Various scales. These domains make assumptions of data, naturally.
 		var selectedPoints = pointsBubble.filter(isSelectedPoints);
-		var selectedScalePoints = pointsBubble.filter(isSelectedScalePoints);
+		//var selectedScalePoints = pointsBubble.filter(isSelectedScalePoints);
 		console.log(selectedPoints);
 
 		svg2.selectAll("circle").remove();
@@ -644,10 +654,10 @@ var yAxis2graph = svg2.append("g")
 		if(selectedPoints.length == 0) return;
 		selectedPoints.sort(order);
 
-		xDomain2 = [0, d3.max(selectedScalePoints,function(d){
+		xDomain2 = [0, d3.max(pointsBubble,function(d){
 			return d.x;
 		})*1.2];  
-		yDomain2 = [0,d3.max(selectedScalePoints,function(d){
+		yDomain2 = [0,d3.max(pointsBubble,function(d){
 			return d.y;
 		})+5];
 		 xScale2 = d3.scale.linear().domain(xDomain2).range([0, width]),
@@ -739,16 +749,9 @@ var yAxis2graph = svg2.append("g")
 	}
 
 
-	//drawBubbleChart();
-
-	    	});
-	});
-
-
+	drawBubbleChart();
 	// pie chart
 
-	var Piewidth = 350,
-    Pieheight = 350,
     radius = Math.min(Piewidth, Pieheight) / 2,
     innerRadius = 0.3 * radius;
 
@@ -781,12 +784,32 @@ var svg = d3.select("#bar-chart").append("svg")
 
 svg.call(tip);
 
-d3.csv('aster_data.csv', function(error, data) {
+ function drawPieChart() {
+ 		svg.selectAll(".solidArc").remove();
+  		svg.selectAll(".outlineArc").remove();
+  		svg.selectAll("text").remove();
+  		
+  		function isSelectedPieData (data) {
+			return Number(data.YEAR) == year;
+		}
 
-	  data.forEach(function(d) {
-	    d.id     =  d.id;
-	    d.order  = +d.order;
+  		var data = selectedData.filter(isSelectedPieData).map(function (salary) {
+			return { 
+				label: salary.OCC_TITLE,
+				//year: Number(salary.YEAR),
+				color: colorScale(salary.OCC_TITLE),
+				weight: Number(salary.TOT_EMP),
+				score: Number(salary.A_MEAN) 
+			};
+		});
+
+  		var aMeanMax = d3.max(data, function(d){
+  			return d.score;
+  		});
+
+	  	data.forEach(function(d) {
 	    d.color  =  d.color;
+	    d.max = aMeanMax;
 	    d.weight = +d.weight;
 	    d.score  = +d.score;
 	    d.Piewidth  = +d.weight;
@@ -794,6 +817,7 @@ d3.csv('aster_data.csv', function(error, data) {
 	  });
 	  // for (var i = 0; i < data.score; i++) { console.log(data[i].id) }
 	  
+
 	  var path = svg.selectAll(".solidArc")
 	      .data(pie(data))
 	    .enter().append("path")
@@ -802,7 +826,8 @@ d3.csv('aster_data.csv', function(error, data) {
 	      .attr("stroke", "gray")
 	      .attr("d", arc)
 	      .on('mouseover', tip.show)
-	      .on('mouseout', tip.hide);
+	      .on('mouseout', tip.hide)
+	      .on("click", tip.show);
 
 	  var outerPath = svg.selectAll(".outlineArc")
 	      .data(pie(data))
@@ -830,7 +855,14 @@ d3.csv('aster_data.csv', function(error, data) {
 	    .text(Math.round(score))
 	    .style("font-size","30px");
 
+	};
+
+	drawPieChart();
+
+	    	});
 	});
+
+
 
 	function sizeChange() {
 	    d3.select("#map g").attr("transform", "scale(" + $(window).width()/1500 + ")");
