@@ -9,12 +9,10 @@
   <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 
   	<style>
-  	svg{
-		width:100%;
-	}
-
+  	div{
+  		text-align:center;
+  	}
 	#map{
-		margin-left: 30px;
 		height: 500px;
 	}	
 
@@ -99,17 +97,6 @@
 	}
 
 
-	#chart {
-	  margin-left: 40px;
-	  height: 510px;
-	}
-
-	#chartbubble {
-	  margin-left: 40px;
-	  height: 510px;
-	}
-
-
 	.dot {
 	  stroke: #000;
 	}
@@ -159,23 +146,27 @@
 </head>
 <body  onload="sizeChange()">
 	<div class="row">
+		<div class="col-xs-12">
+			<div id="year">
+				<ul>
+					<li class="year">2005</li>
+					<li class="year">2006</li>
+					<li class="year">2007</li>
+					<li class="year">2008</li>
+					<li class="year">2009</li>
+					<li class="year">2010</li>
+					<li class="year">2011</li>
+					<li class="year">2012</li>
+					<li class="year">2013</li>
+					<li class="year" style="background:#d3d3d3">2014</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="row">
 	    <div class="col-xs-12 col-md-7" >
 		  	<div id="map-wrapper">
 					<div id="map">
-						<div id="year" style="margin-left:10%">
-							<ul>
-								<li class="year">2005</li>
-								<li class="year">2006</li>
-								<li class="year">2007</li>
-								<li class="year">2008</li>
-								<li class="year">2009</li>
-								<li class="year">2010</li>
-								<li class="year">2011</li>
-								<li class="year">2012</li>
-								<li class="year">2013</li>
-								<li class="year" style="background:#d3d3d3">2014</li>
-							</ul>
-						</div>
 					</div>
 			</div>
 	    </div>
@@ -199,10 +190,9 @@
 	<script>
 	d3.select(window)
     		.on("resize", sizeChange);
-
-	var Mapwidth = 800;
-	var Mapheight = 580;
-	var projection = d3.geo.albersUsa().scale(Mapwidth).translate([Mapwidth/2.2, Mapheight/3]);
+	var Mapwidth = 750;
+	var Mapheight = Mapwidth / 5 * 3;
+	var projection = d3.geo.albersUsa().scale(Mapwidth).translate([Mapwidth/2,Mapheight/2]);
 	var path = d3.geo.path().projection(projection); //path of USA
 	var statesCoord;
 
@@ -211,8 +201,8 @@
 	// Chart dimensions.
 
 var margin = {top: 22.5, right: 19.5, bottom: 30.5, left: 39.5},
-    width = 960 - margin.right,
-    height = 500 - margin.top - margin.bottom,
+    width = 960,
+    height = 500,
     padding = 30;
 var stateGrid = {
 "ME" : { "state": "ME", "row": 0, "col": 10 },
@@ -275,8 +265,8 @@ var year = 2014;
 var salaries;
 var selectedData;
 
-var Piewidth = 350,
-    Pieheight = 350;
+var Piewidth = 425,
+    Pieheight = Piewidth;
 // Download global health data, sourced from WHO, formatted by the Guardian
 var svg1 = d3.select("#chart").append("svg")
 	    	.attr("width", width + margin.left + margin.right)
@@ -323,6 +313,7 @@ stateIDs.forEach(function(stateID) {
 			selectedData = salaries.filter(isSelectedData);
 
 		    var mapSvg = d3.select("#map").append("svg")
+		        .attr("width", Mapwidth)
 		        .attr("height", Mapheight);
 
 		    //select data based on different years
@@ -781,8 +772,8 @@ var outlineArc = d3.svg.arc()
 
 var svg = d3.select("#bar-chart").append("svg")
     .attr("width", Piewidth)
-    .attr("height", Pieheight/2)
-    .append("g");
+    .attr("height", Pieheight)
+    .append("g").attr("transform", "translate(" + Piewidth/2 + "," + Pieheight/2 + ")");
 
 svg.call(tip);
 
@@ -868,23 +859,37 @@ svg.call(tip);
 
 	function sizeChange() {
 		// resize map
-	    d3.select("#map g").attr("transform", "scale(" + $(window).width()/1500 + ")");
-	    $("svg").height($("#map").width()*0.218);
+		if($(window).width()>=992){
+		    d3.select("#map g").attr("transform", "scale(" + 7*$(window).width()/12/Mapwidth + ")");
+		    $("#map svg").width(7*$(window).width()/12);
+		    $("#map svg").height(7*$(window).width()/12/5*3);
 
-	    // resize arcschart
-	    d3.select("#bar-chart g").attr("transform", "scale(" + $(window).width()/1200 + ") translate(" + Piewidth / 1.4 + "," + Pieheight / 1.3 + ")");
-	    $("svg").height($("#bar-chart").width()*0.818);
+		    // resize arcschart
+		    d3.select("#bar-chart g").attr("transform", "scale(" + 4*$(window).width()/12/Piewidth + ") translate(" + Piewidth /2+ "," + Pieheight /2 + ")");
+		    $("#bar-chart svg").width(4*$(window).width()/12);
+		    $("#bar-chart svg").height(4*$(window).width()/12);
+		}else{
 
+		    d3.select("#map g").attr("transform", "scale(" + $(window).width()/Mapwidth + ")");
+		    $("#map svg").width($(window).width());
+		    $("#map svg").height($(window).width()/5*3);
+
+		    // resize arcschart
+		    d3.select("#bar-chart g").attr("transform", "scale(" + 7*$(window).width()/12/Piewidth + ") translate(" + Piewidth /2+ "," + Pieheight /2 + ")");
+		    $("#bar-chart svg").width(7*$(window).width()/12);
+		    $("#bar-chart svg").height(7*$(window).width()/12);
+		}
 	    // resize bubble chart
-	    d3.select("#chartbubble g").attr("transform", "scale(" + $(window).width()/1200 + ") translate(" + width / 8 + "," + height / 4 + ")");
-	    $("svg").height($("#chartbubble").width()*0.818);
+	    var scalefactor = 5*$(window).width()/960/6;
+	    d3.select("#chartbubble g").attr("transform", "scale(" + scalefactor + ") translate(" + $(window).width()/18 + "," + 0 + ")");
+	    $("#chartbubble svg").height(scalefactor*700);
 
 	    // resize regression chart
-	    d3.select("#chart g").attr("transform", "scale(" + $(window).width()/1200 + ") translate(" + width / 8 + "," + height / 4 + ")");
-	    $("svg").height($("#chart").width()*0.818);
+	    d3.select("#chart g").attr("transform", "scale(" + scalefactor + ") translate(" + s$(window).width()/18 + "," + 0 + ")");
+	    $("#chart svg").height(scalefactor * 700);
 	}
 
-
+	setInterval(sizeChange, 500);
 	
 	</script>
 </body>
