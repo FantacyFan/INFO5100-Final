@@ -12,9 +12,6 @@
   	div{
   		text-align:center;
   	}
-	#map{
-		height: 500px;
-	}	
 
 	#year{
 		padding-top: 80px;
@@ -29,10 +26,6 @@
 		padding: 3px 6px;
 		border: 1px solid black;
 		font-size: 15px;
-	}
-
-	#bar-chart{
-		height: 500px;
 	}
 	
 	.axis path,
@@ -881,12 +874,14 @@ svg.call(tip);
 		}
 	    // resize bubble chart
 	    var scalefactor = 5*$(window).width()/960/6;
-	    d3.select("#chartbubble g").attr("transform", "scale(" + scalefactor + ") translate(" + $(window).width()/18 + "," + 0 + ")");
-	    $("#chartbubble svg").height(scalefactor*700);
+	    d3.select("#chartbubble g").attr("transform", "scale(" + scalefactor + ") translate(" + $(window).width()/9 + "," + $(window).width()/12 + ")");
+	    $("#chartbubble svg").height(scalefactor * ($("#chartbubble g")[0].getBBox().height+120));
+	    $("#chartbubble svg").width(scalefactor * ($("#chartbubble g")[0].getBBox().width+90));
 
 	    // resize regression chart
-	    d3.select("#chart g").attr("transform", "scale(" + scalefactor + ") translate(" + s$(window).width()/18 + "," + 0 + ")");
-	    $("#chart svg").height(scalefactor * 700);
+	    d3.select("#chart g").attr("transform", "scale(" + scalefactor + ") translate(" + $(window).width()/12 + "," + $(window).width()/12 + ")");
+	    $("#chart svg").height(scalefactor * ($("#chart g")[0].getBBox().height+120));
+	    $("#chart svg").width(scalefactor * ($("#chart g")[0].getBBox().width+90));
 	}
 
 	setInterval(sizeChange, 500);
