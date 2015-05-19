@@ -169,16 +169,31 @@
 	    </div>
 	</div>
 	<div class="row">
+		<p class="col-xs-12">
+			testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttest
+		</p>
+	</div>
+	<div class="row">
 	<div id = "chartbubble"></div>
 	<div class="slider-container">
         <span id="slider-label">Year: 2014</span><input id = "myslider" type="range" id="year" min="2005" max="2014" step="1" value="2014" ></input>
 	</div>
+	</div>
+	<div class="row">
+		<p class="col-xs-12">
+			testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttest
+		</p>
 	</div>
 
 	<div class="row">
 	<div id="chart"></div>
 	<select id="selectOccupation" >
 	</select>
+	</div>
+	<div class="row">
+		<p class="col-xs-12">
+			testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</br>testtesttesttesttesttesttesttesttesttesttest
+		</p>
 	</div>
 	<script>
 	d3.select(window)
@@ -319,6 +334,7 @@ stateIDs.forEach(function(stateID) {
 			    selectedData = salaries.filter(isSelectedData);
 			    drawPieChart();
 			    drawBubbleChart();
+
 			    /*for(var i=0; i<employee.length; i++){
 		        	if(year_value == employee[i]['YEAR']){
 		        		console.log(employee[i]);
@@ -334,16 +350,19 @@ stateIDs.forEach(function(stateID) {
 		      	.attr("class",function(state){
 			        return state.id;
 		      	})
-		      	.style("fill", "#AC564C")
+		      	.style("fill", "#004E4E")
 		      	.style("stroke", "#ccc")
 		      	.on("mouseover", mouseOver)
 		      	.on("mouseout", mouseOut)
+
 
 		      	//click on state to find the related data
 		      	.on("click",function(d){
 			        var stateName = d3.select(this).attr("class");
 			        selectedState = stateName;
 			        selectedData = salaries.filter(isSelectedData);
+			        d3.selectAll("path").style("fill", "#004E4E");
+			        d3.select(this).style("fill", "#469D9D");
 			        drawPieChart();
 			        drawBubbleChart();
 			        // 
