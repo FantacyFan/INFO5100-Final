@@ -2,15 +2,26 @@
 <head>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-
+  <link href="http://fonts.googleapis.com/css?family=Lato&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="http://d3js.org/topojson.v1.min.js"></script>
   <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
   <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 
   	<style>
+  	body{
+  		font-family: "Lato",sans-serif;
+  	}
+
   	div{
   		text-align:center;
+  	}
+
+  	.title{
+  		font-size: 40px;
+ 		text-transform: uppercase;
+ 		top:50px;
+ 		position: relative;
   	}
 
 	#year{
@@ -138,9 +149,9 @@
   	</style>
 </head>
 <body  onload="sizeChange()">
-	<div class="row">
+	<div class="row title">
 		<div class="col-xs-12">
-			Title
+			Occupational Employment Statistics</br> of</br> United States
 		</div>
 	</div>
 	<div class="row">
